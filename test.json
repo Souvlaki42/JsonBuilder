@@ -1,0 +1,16 @@
+{
+    "name": "George MacNight",
+    "age": 23,
+    "rich": true,
+    "job": "Masterchef",
+    "family": {
+        "mother": "Joanna Nimbers",
+        "father": "Cooper MacNight",
+        "brother": "Nick MacNight",
+        "sister": "Layla MacNight",
+        "wife": "Kate Gateberg",
+        "son": "John MacNight",
+        "daughter": "Candy MacNight",
+        "pet": "Maggy"
+    }
+}
