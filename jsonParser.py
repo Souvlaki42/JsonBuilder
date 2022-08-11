@@ -8,7 +8,7 @@ class JsonParser():
         self.file = file
 
     def read_file(self):
-        with open(self.file, "r") as file:
+        with open(self.file) as file:
             return json.load(file)
 
     def write_file(self, data, intents = 4):
@@ -27,7 +27,7 @@ class JsonParser():
 
     def write_key(self, keypath, value, seperator = "/", intents = 4):
         keys = keypath.split(seperator)
-        with open(self.file, "r") as file:
+        with open(self.file) as file:
             data = json.load(file)
             data2 = data
             lastKey = keys.pop()
