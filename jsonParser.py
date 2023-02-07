@@ -1,38 +1,34 @@
-from genericpath import exists
-import json, sys
+import json
 
-class JsonParser():
-    def __init__(self, file):
-        if not exists(file):
-            sys.exit("This file doesn't exist!")
-        self.file = file
+def readDataFromJsonFile(filename, indents = 4, sortKeys = False):
+	with open(filename) as file:
+		return json.load(file, indent = indents, sort_keys = sortKeys)
 
-    def read_file(self):
-        with open(self.file) as file:
-            return json.load(file)
+def writeDataToJsonFile(filename, data, indents = 4, sortKeys = False):
+	with open(filename, "w") as file:
+		return json.dump(data, file, indent = indents, sort_keys = sortKeys)
 
-    def write_file(self, data, intents = 4):
-        with open(self.file, "w") as file:
-            return json.dump(data, file, indent = intents)
+def readKeyFromJsonFile(filename, keypath, seperator = "/"):
+	keys = keypath.split(seperator)
+	with open(filename) as file:
+		data = json.load(file)
+		for key in keys:
+			data = data[key]
+		return data
 
-    def read_key(self, keypath, seperator = "/"):
-        keys = keypath.split(seperator)
-        with open(self.file) as file:
-            key0 = keys[0]
-            data = json.load(file)[key0]
-            del keys[0]
-            for key in keys:
-                data = data[key]
-            return data
-
-    def write_key(self, keypath, value, seperator = "/", intents = 4):
-        keys = keypath.split(seperator)
-        with open(self.file) as file:
-            data = json.load(file)
-            data2 = data
-            lastKey = keys.pop()
-        with open(self.file, "w") as file:
-            for key in keys:
-                data2 = data2[key]
-            data2[lastKey] = value
-            json.dump(data, file, indent = intents)
+def writeKeyToJsonFile(filename, keypath, value, seperator = "/", indents = 4, sortKeys = False, createMissing = True):
+	keys = keypath.split(seperator)
+	with open(filename) as file:
+		data = json.load(file)
+		d = data
+		for key in keys[:-1]:
+			if key in d:
+				d = d[key]
+			elif createMissing:
+				d = d.setdefault(key, {})
+			else:
+				return data
+		if keys[-1] in d or createMissing:
+			d[keys[-1]] = value
+		writeDataToJsonFile(filename, data, indents, sortKeys)
+		return data
